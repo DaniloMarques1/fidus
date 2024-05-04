@@ -12,7 +12,7 @@ import (
 
 type MasterApi interface {
 	Register(dto.RegisterMasterDto) error
-	Authenticate(dto.AuthenticateMasterDto) (string, error)
+	Authenticate(dto.AuthenticateMasterDto) (string, int64, error)
 }
 
 type masterApi struct {
@@ -40,30 +40,30 @@ func (master *masterApi) Register(body dto.RegisterMasterDto) error {
 	return nil
 }
 
-func (master *masterApi) Authenticate(body dto.AuthenticateMasterDto) (string, error) {
+func (master *masterApi) Authenticate(body dto.AuthenticateMasterDto) (string, int64, error) {
 	b, err := json.Marshal(body)
 	if err != nil {
-		return "", err
+		return "", 0, err
 	}
 	resp, err := http.Post(master.baseUrl+"/authenticate", "application/json", bytes.NewReader(b))
 	if err != nil {
-		return "", err
+		return "", 0, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", readErrorMessageFromBody(resp.Body)
+		return "", 0, readErrorMessageFromBody(resp.Body)
 	}
 	responseBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return "", 0, err
 	}
 	respBody := &dto.AuthenticateMasterResponseDto{}
 	if err := json.Unmarshal(responseBytes, respBody); err != nil {
-		return "", err
+		return "", 0, err
 	}
 
-	return respBody.AccessToken, nil
+	return respBody.AccessToken, respBody.ExpiresAt, nil
 }
 
 func readErrorMessageFromBody(body io.ReadCloser) error {

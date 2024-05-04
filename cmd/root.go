@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/danilomarques1/fidus/cmd/master"
+	"github.com/danilomarques1/fidus/cmd/password"
 	"github.com/spf13/cobra"
 )
 
@@ -29,13 +30,23 @@ func Execute() {
 		Run:   master.Authenticate,
 	}
 
+	storePasswordCmd := &cobra.Command{
+		Use:   "store",
+		Short: "To store a password",
+		Long:  "Created a new master password",
+		Run:   password.StorePassword,
+	}
+
 	registerCmd.PersistentFlags().String("name", "", "Master name")
 	registerCmd.PersistentFlags().String("email", "", "Master email")
 
-	authenticateCmd.PersistentFlags().String("email", "", "Master name")
+	authenticateCmd.PersistentFlags().String("email", "", "Master email")
+
+	storePasswordCmd.PersistentFlags().String("key", "", "The password key you want to store")
 
 	cmd.AddCommand(registerCmd)
 	cmd.AddCommand(authenticateCmd)
+	cmd.AddCommand(storePasswordCmd)
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)

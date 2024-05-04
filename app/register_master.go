@@ -3,7 +3,7 @@ package app
 import (
 	"errors"
 
-	"github.com/danilomarques1/fidus/app/api"
+	"github.com/danilomarques1/fidus/api"
 	"github.com/danilomarques1/fidus/dto"
 	"github.com/danilomarques1/fidus/validate"
 	"github.com/go-playground/validator/v10"
