@@ -37,6 +37,15 @@ func (cfg *Config) CreateConfigFolder() error {
 	return nil
 }
 
+func (cfg *Config) SetupLogger() error {
+	logOutputFile, err := os.OpenFile(cfg.configFolder+"/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	log.SetOutput(logOutputFile)
+	return nil
+}
+
 // return true if there is a valid token stored
 func (cfg *Config) IsTokenValid() bool {
 	token, err := cfg.ReadToken()

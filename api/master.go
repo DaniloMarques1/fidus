@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/danilomarques1/fidus/dto"
@@ -43,23 +44,29 @@ func (master *masterApi) Register(body dto.RegisterMasterDto) error {
 func (master *masterApi) Authenticate(body dto.AuthenticateMasterDto) (string, int64, error) {
 	b, err := json.Marshal(body)
 	if err != nil {
+		log.Println(err.Error())
 		return "", 0, err
 	}
 	resp, err := http.Post(master.baseUrl+"/authenticate", "application/json", bytes.NewReader(b))
 	if err != nil {
+		log.Println(err.Error())
 		return "", 0, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", 0, readErrorMessageFromBody(resp.Body)
+		err = readErrorMessageFromBody(resp.Body)
+		log.Println(err.Error())
+		return "", 0, err
 	}
 	responseBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
+		log.Println(err.Error())
 		return "", 0, err
 	}
 	respBody := &dto.AuthenticateMasterResponseDto{}
 	if err := json.Unmarshal(responseBytes, respBody); err != nil {
+		log.Println(err.Error())
 		return "", 0, err
 	}
 

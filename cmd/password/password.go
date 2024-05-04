@@ -15,7 +15,8 @@ func StorePassword(cmd *cobra.Command, args []string) {
 	fmt.Print("Password: ")
 	pwd, err := terminal.ReadUserPassword()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 	fmt.Print("Confirm Password: ")
 	confirmPwd, err := terminal.ReadUserPassword()

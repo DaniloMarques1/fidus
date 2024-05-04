@@ -12,5 +12,8 @@ func main() {
 	if err := cfg.CreateConfigFolder(); err != nil {
 		log.Fatal(err)
 	}
+	if err := cfg.SetupLogger(); err != nil {
+		log.Fatal(err)
+	}
 	cmd.Execute()
 }
