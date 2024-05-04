@@ -22,16 +22,11 @@ func (retrieve *RetrievePassword) Execute(key string) (string, error) {
 	if len(key) == 0 {
 		return "", errors.New("Invalid parameters")
 	}
-
-	if !retrieve.config.IsTokenValid() {
-		return "", errors.New("You need to authenticate again")
-	}
-
-	token, err := retrieve.config.ReadToken()
+	token, err := retrieve.config.GetToken()
 	if err != nil {
 		return "", err
 	}
-	password, err := retrieve.passwordApi.RetrievePassword(token.AccessToken, key)
+	password, err := retrieve.passwordApi.RetrievePassword(token, key)
 	if err != nil {
 		return "", err
 	}

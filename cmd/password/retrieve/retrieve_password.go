@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/danilomarques1/fidus/app"
-	"github.com/danilomarques1/fidus/cmd/password"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +12,7 @@ var RetrievePasswordCmd = &cobra.Command{
 	Use:   "retrieve",
 	Short: "To retrieve a password",
 	Long:  "Retrieve a stored password",
-	Run:   password.RetrievePassword,
+	Run:   run,
 }
 
 func init() {

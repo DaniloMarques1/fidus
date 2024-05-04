@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 	"log"
@@ -58,25 +59,31 @@ func (cfg *Config) SetupLogger() error {
 	return nil
 }
 
-// return true if there is a valid token stored
-func (cfg *Config) IsTokenValid() bool {
-	token, err := cfg.ReadToken()
-	if err != nil {
-		return false
-	}
-	return cfg.isTokenExpired(token.ExpiresAt)
-}
-
 func (cfg *Config) isTokenExpired(expiresAt int64) bool {
-	t1 := time.UnixMilli(expiresAt * 1000)
-	t2 := time.Now()
+	tokenExpirationDate := time.UnixMilli(expiresAt * 1000)
+	currentDate := time.Now()
 
-	return t1.Compare(t2) == +1
+	return tokenExpirationDate.Compare(currentDate) == -1
 }
 
-// TODO: need to improve this because i am reading the token
-// to validate and then reading again to use it
-func (cfg *Config) ReadToken() (*Token, error) {
+func (cfg *Config) GetToken() (string, error) {
+	token, err := cfg.readToken()
+	if err != nil {
+		return "", errors.New("You need to authenticate")
+	}
+	if cfg.isTokenExpired(token.ExpiresAt) {
+		return "", errors.New("Your token has expired")
+	}
+	return token.AccessToken, nil
+}
+
+func (cfg *Config) RemoveToken() {
+	if err := os.Truncate(fmt.Sprintf("%v/.token", cfg.configFolder), 0); err != nil {
+		log.Printf("Error removing token %v", err)
+	}
+}
+
+func (cfg *Config) readToken() (*Token, error) {
 	b, err := os.ReadFile(fmt.Sprintf("%v/.token", cfg.configFolder))
 	if err != nil {
 		return nil, err

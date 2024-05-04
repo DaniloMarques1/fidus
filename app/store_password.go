@@ -28,14 +28,11 @@ func (storePassword *StorePassword) Execute(key, password string) error {
 	if err := storePassword.validate.Struct(body); err != nil {
 		return errors.New("Invalid parameters")
 	}
-	if !storePassword.config.IsTokenValid() {
-		return errors.New("Token expired. Please authenticate again")
-	}
-	token, err := storePassword.config.ReadToken()
+	token, err := storePassword.config.GetToken()
 	if err != nil {
 		return err
 	}
-	if err := storePassword.passwordApi.StorePassword(token.AccessToken, body); err != nil {
+	if err := storePassword.passwordApi.StorePassword(token, body); err != nil {
 		return err
 	}
 	return nil
