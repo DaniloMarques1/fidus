@@ -1,4 +1,4 @@
-package password
+package store
 
 import (
 	"fmt"
@@ -10,7 +10,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func StorePassword(cmd *cobra.Command, args []string) {
+var StorePasswordCmd = &cobra.Command{
+	Use:   "store",
+	Short: "To store a password",
+	Long:  "Created a new master password",
+	Run:   run,
+}
+
+func init() {
+	StorePasswordCmd.PersistentFlags().String("key", "", "The password key you want to store")
+	StorePasswordCmd.MarkPersistentFlagRequired("key")
+}
+
+func run(cmd *cobra.Command, args []string) {
 	key := cmd.Flag("key").Value.String()
 	fmt.Print("Password: ")
 	pwd, err := terminal.ReadUserPassword()
@@ -33,16 +45,4 @@ func StorePassword(cmd *cobra.Command, args []string) {
 	if err := storePassword.Execute(key, pwd); err != nil {
 		log.Fatal(err)
 	}
-
-}
-
-func RetrievePassword(cmd *cobra.Command, args []string) {
-	key := cmd.Flag("key").Value.String()
-	retrievePassword := app.NewRetrievePassword()
-	password, err := retrievePassword.Execute(key)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	fmt.Println(password)
 }

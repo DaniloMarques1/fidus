@@ -3,8 +3,10 @@ package cmd
 import (
 	"log"
 
-	"github.com/danilomarques1/fidus/cmd/master"
-	"github.com/danilomarques1/fidus/cmd/password"
+	"github.com/danilomarques1/fidus/cmd/master/authenticate"
+	"github.com/danilomarques1/fidus/cmd/master/register"
+	"github.com/danilomarques1/fidus/cmd/password/retrieve"
+	"github.com/danilomarques1/fidus/cmd/password/store"
 	"github.com/spf13/cobra"
 )
 
@@ -16,51 +18,10 @@ func Execute() {
 			cmd.Help()
 		},
 	}
-
-	registerCmd := &cobra.Command{
-		Use:   "register",
-		Short: "Create a new master account",
-		Long:  "Command to create a new master account. You need to provide the email, name and a password",
-		Run:   master.RegisterCommand,
-	}
-	authenticateCmd := &cobra.Command{
-		Use:   "authenticate",
-		Short: "Authenticate a master to create password",
-		Long:  "You will need to get authenticated before you can store/retrieve passwords",
-		Run:   master.Authenticate,
-	}
-
-	storePasswordCmd := &cobra.Command{
-		Use:   "store",
-		Short: "To store a password",
-		Long:  "Created a new master password",
-		Run:   password.StorePassword,
-	}
-	retrievePasswordCmd := &cobra.Command{
-		Use:   "retrieve",
-		Short: "To retrieve a password",
-		Long:  "Retrieve a stored password",
-		Run:   password.RetrievePassword,
-	}
-
-	registerCmd.PersistentFlags().String("name", "", "Master name")
-	registerCmd.PersistentFlags().String("email", "", "Master email")
-	registerCmd.MarkPersistentFlagRequired("name")
-	registerCmd.MarkPersistentFlagRequired("email")
-
-	authenticateCmd.PersistentFlags().String("email", "", "Master email")
-	authenticateCmd.MarkPersistentFlagRequired("email")
-
-	storePasswordCmd.PersistentFlags().String("key", "", "The password key you want to store")
-	storePasswordCmd.MarkPersistentFlagRequired("key")
-
-	retrievePasswordCmd.PersistentFlags().String("key", "", "The password key you want to retrieve")
-	retrievePasswordCmd.MarkPersistentFlagRequired("key")
-
-	cmd.AddCommand(registerCmd)
-	cmd.AddCommand(authenticateCmd)
-	cmd.AddCommand(storePasswordCmd)
-	cmd.AddCommand(retrievePasswordCmd)
+	cmd.AddCommand(register.RegisterCmd)
+	cmd.AddCommand(authenticate.AuthenticateCmd)
+	cmd.AddCommand(store.StorePasswordCmd)
+	cmd.AddCommand(retrieve.RetrievePasswordCmd)
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)
