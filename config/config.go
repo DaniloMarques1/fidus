@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -26,8 +27,19 @@ func NewConfig() *Config {
 	if err != nil {
 		log.Fatal(err)
 	}
-	configFolder := fmt.Sprintf("%v/.config_cache/fidus", homeDir)
-	return &Config{configFolder}
+	cfg := &Config{}
+	configLocation := cfg.getConfigLocation()
+	cfg.configFolder = fmt.Sprintf("%v/%v", homeDir, configLocation)
+	return cfg
+}
+
+func (cfg *Config) getConfigLocation() string {
+	switch runtime.GOOS {
+	case "windows":
+		return "AppData/Local/fidus"
+	default:
+		return ".config/fidus"
+	}
 }
 
 func (cfg *Config) CreateConfigFolder() error {
