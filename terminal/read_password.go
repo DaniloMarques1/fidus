@@ -8,7 +8,6 @@ import (
 )
 
 func ReadUserPassword() (string, error) {
-	fmt.Print("Password: ")
 	b, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		return "", err
