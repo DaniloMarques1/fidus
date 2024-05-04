@@ -36,6 +36,12 @@ func Execute() {
 		Long:  "Created a new master password",
 		Run:   password.StorePassword,
 	}
+	retrievePasswordCmd := &cobra.Command{
+		Use:   "retrieve",
+		Short: "To retrieve a password",
+		Long:  "Retrieve a stored password",
+		Run:   password.RetrievePassword,
+	}
 
 	registerCmd.PersistentFlags().String("name", "", "Master name")
 	registerCmd.PersistentFlags().String("email", "", "Master email")
@@ -48,9 +54,13 @@ func Execute() {
 	storePasswordCmd.PersistentFlags().String("key", "", "The password key you want to store")
 	storePasswordCmd.MarkPersistentFlagRequired("key")
 
+	retrievePasswordCmd.PersistentFlags().String("key", "", "The password key you want to retrieve")
+	retrievePasswordCmd.MarkPersistentFlagRequired("key")
+
 	cmd.AddCommand(registerCmd)
 	cmd.AddCommand(authenticateCmd)
 	cmd.AddCommand(storePasswordCmd)
+	cmd.AddCommand(retrievePasswordCmd)
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)

@@ -21,7 +21,8 @@ func StorePassword(cmd *cobra.Command, args []string) {
 	fmt.Print("Confirm Password: ")
 	confirmPwd, err := terminal.ReadUserPassword()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 	if pwd != confirmPwd {
 		fmt.Println("passwords needs to match")
@@ -33,4 +34,15 @@ func StorePassword(cmd *cobra.Command, args []string) {
 		log.Fatal(err)
 	}
 
+}
+
+func RetrievePassword(cmd *cobra.Command, args []string) {
+	key := cmd.Flag("key").Value.String()
+	retrievePassword := app.NewRetrievePassword()
+	password, err := retrievePassword.Execute(key)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	fmt.Println(password)
 }
