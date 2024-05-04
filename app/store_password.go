@@ -35,9 +35,6 @@ func (storePassword *StorePassword) Execute(key, password string) error {
 	if err != nil {
 		return err
 	}
-	if err != nil {
-		return err
-	}
 	if err := storePassword.passwordApi.StorePassword(token.AccessToken, body); err != nil {
 		return err
 	}
