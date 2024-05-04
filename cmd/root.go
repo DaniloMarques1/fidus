@@ -39,10 +39,14 @@ func Execute() {
 
 	registerCmd.PersistentFlags().String("name", "", "Master name")
 	registerCmd.PersistentFlags().String("email", "", "Master email")
+	registerCmd.MarkPersistentFlagRequired("name")
+	registerCmd.MarkPersistentFlagRequired("email")
 
 	authenticateCmd.PersistentFlags().String("email", "", "Master email")
+	authenticateCmd.MarkPersistentFlagRequired("email")
 
 	storePasswordCmd.PersistentFlags().String("key", "", "The password key you want to store")
+	storePasswordCmd.MarkPersistentFlagRequired("key")
 
 	cmd.AddCommand(registerCmd)
 	cmd.AddCommand(authenticateCmd)

@@ -53,6 +53,8 @@ func (cfg *Config) isTokenExpired(expiresAt int64) bool {
 	return t1.Compare(t2) == +1
 }
 
+// TODO: need to improve this because i am reading the token
+// to validate and then reading again to use it
 func (cfg *Config) ReadToken() (*Token, error) {
 	b, err := os.ReadFile(fmt.Sprintf("%v/.token", cfg.configFolder))
 	if err != nil {
