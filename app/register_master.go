@@ -1,9 +1,8 @@
 package app
 
 import (
-	"errors"
-
 	"github.com/danilomarques1/fidus/api"
+	"github.com/danilomarques1/fidus/clierror"
 	"github.com/danilomarques1/fidus/dto"
 	"github.com/danilomarques1/fidus/validate"
 	"github.com/go-playground/validator/v10"
@@ -23,7 +22,7 @@ func NewRegisterMaster() *RegisterMaster {
 func (master *RegisterMaster) Execute(name, email, password string) error {
 	body := dto.RegisterMasterDto{Name: name, Email: email, Password: password}
 	if err := master.validate.Struct(body); err != nil {
-		return errors.New("Invalid parameters see help for detail on usage")
+		return clierror.ErrInvalidParameters()
 	}
 	if err := master.masterApi.Register(body); err != nil {
 		return err

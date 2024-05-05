@@ -1,9 +1,8 @@
 package app
 
 import (
-	"errors"
-
 	"github.com/danilomarques1/fidus/api"
+	"github.com/danilomarques1/fidus/clierror"
 	"github.com/danilomarques1/fidus/config"
 	"github.com/danilomarques1/fidus/dto"
 	"github.com/danilomarques1/fidus/validate"
@@ -26,7 +25,7 @@ func NewAuthenticateMaster() *AuthenticateMaster {
 func (master *AuthenticateMaster) Execute(email, password string) error {
 	body := dto.AuthenticateMasterDto{Email: email, Password: password}
 	if err := master.validate.Struct(body); err != nil {
-		return errors.New("Invalid parameters see help for usage")
+		return clierror.ErrInvalidParameters()
 	}
 	accessToken, expiresAt, err := master.masterApi.Authenticate(body)
 	if err != nil {

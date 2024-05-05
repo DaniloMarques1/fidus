@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/fs"
 	"log"
@@ -10,6 +9,8 @@ import (
 	"runtime"
 	"sync"
 	"time"
+
+	"github.com/danilomarques1/fidus/clierror"
 )
 
 type Token struct {
@@ -69,10 +70,10 @@ func (cfg *Config) isTokenExpired(expiresAt int64) bool {
 func (cfg *Config) GetToken() (string, error) {
 	token, err := cfg.readToken()
 	if err != nil {
-		return "", errors.New("You need to authenticate")
+		return "", clierror.ErrInvalidToken()
 	}
 	if cfg.isTokenExpired(token.ExpiresAt) {
-		return "", errors.New("Your token has expired")
+		return "", clierror.ErrInvalidToken()
 	}
 	return token.AccessToken, nil
 }

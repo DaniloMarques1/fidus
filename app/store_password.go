@@ -1,9 +1,8 @@
 package app
 
 import (
-	"errors"
-
 	"github.com/danilomarques1/fidus/api"
+	"github.com/danilomarques1/fidus/clierror"
 	"github.com/danilomarques1/fidus/config"
 	"github.com/danilomarques1/fidus/dto"
 	"github.com/danilomarques1/fidus/validate"
@@ -26,7 +25,7 @@ func NewStorePassword() *StorePassword {
 func (storePassword *StorePassword) Execute(key, password string) error {
 	body := &dto.StorePasswordDto{Key: key, Password: password}
 	if err := storePassword.validate.Struct(body); err != nil {
-		return errors.New("Invalid parameters")
+		return clierror.ErrInvalidParameters()
 	}
 	token, err := storePassword.config.GetToken()
 	if err != nil {

@@ -1,9 +1,8 @@
 package app
 
 import (
-	"errors"
-
 	"github.com/danilomarques1/fidus/api"
+	"github.com/danilomarques1/fidus/clierror"
 	"github.com/danilomarques1/fidus/config"
 )
 
@@ -20,7 +19,7 @@ func NewRetrievePassword() *RetrievePassword {
 
 func (retrieve *RetrievePassword) Execute(key string) (string, error) {
 	if len(key) == 0 {
-		return "", errors.New("Invalid parameters")
+		return "", clierror.ErrInvalidParameters()
 	}
 	token, err := retrieve.config.GetToken()
 	if err != nil {
