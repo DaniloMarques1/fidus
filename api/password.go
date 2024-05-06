@@ -12,6 +12,8 @@ import (
 type PasswordApi interface {
 	StorePassword(token string, body *dto.StorePasswordDto) error
 	RetrievePassword(token, key string) (string, error)
+	DeletePassword(token, key string) error
+	UpdatePassword(token, key string, body *dto.UpdatePasswordRequestDto) error
 }
 
 type passwordApi struct {
@@ -73,4 +75,49 @@ func (p *passwordApi) RetrievePassword(token, key string) (string, error) {
 	}
 
 	return respBody.Password, nil
+}
+
+func (p *passwordApi) DeletePassword(token, key string) error {
+	req, err := http.NewRequest(http.MethodDelete, p.baseUrl+"/delete", nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Authorization", "Bearer "+token)
+	urlQuery := req.URL.Query()
+	urlQuery.Add("key", key)
+	req.URL.RawQuery = urlQuery.Encode()
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusNoContent {
+		return readErrorMessageFromBody(resp.Body)
+	}
+
+	return nil
+}
+
+func (p *passwordApi) UpdatePassword(token, key string, body *dto.UpdatePasswordRequestDto) error {
+	b, err := json.Marshal(body)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPut, p.baseUrl+"/update", bytes.NewReader(b))
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Authorization", "Bearer "+token)
+	q := req.URL.Query()
+	q.Add("key", key)
+	req.URL.RawQuery = q.Encode()
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	return nil
 }

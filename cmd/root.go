@@ -5,8 +5,10 @@ import (
 
 	"github.com/danilomarques1/fidus/cmd/master/authenticate"
 	"github.com/danilomarques1/fidus/cmd/master/register"
+	"github.com/danilomarques1/fidus/cmd/password/deletepassword"
 	"github.com/danilomarques1/fidus/cmd/password/retrieve"
 	"github.com/danilomarques1/fidus/cmd/password/store"
+	"github.com/danilomarques1/fidus/cmd/password/update"
 	"github.com/spf13/cobra"
 )
 
@@ -22,6 +24,8 @@ func Execute() {
 	cmd.AddCommand(authenticate.AuthenticateCmd)
 	cmd.AddCommand(store.StorePasswordCmd)
 	cmd.AddCommand(retrieve.RetrievePasswordCmd)
+	cmd.AddCommand(deletepassword.DeletePasswordCmd)
+	cmd.AddCommand(update.UpdatePasswordCmd)
 
 	if err := cmd.Execute(); err != nil {
 		log.Fatal(err)
