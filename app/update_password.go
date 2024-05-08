@@ -16,7 +16,7 @@ type UpdatePassword struct {
 }
 
 func NewUpdatePassword() *UpdatePassword {
-	passwordApi := api.NewPasswordApi("http://localhost:8080/fidus/password")
+	passwordApi := api.NewPasswordApi()
 	cfg := config.NewConfig()
 	v := validate.Validate()
 	return &UpdatePassword{passwordApi: passwordApi, cfg: cfg, validate: v}

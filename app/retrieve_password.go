@@ -12,7 +12,7 @@ type RetrievePassword struct {
 }
 
 func NewRetrievePassword() *RetrievePassword {
-	passwordApi := api.NewPasswordApi("http://localhost:8080/fidus/password")
+	passwordApi := api.NewPasswordApi()
 	config := config.NewConfig()
 	return &RetrievePassword{passwordApi, config}
 }

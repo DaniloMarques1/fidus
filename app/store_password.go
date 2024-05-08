@@ -17,7 +17,7 @@ type StorePassword struct {
 
 func NewStorePassword() *StorePassword {
 	cfg := config.NewConfig()
-	passwordApi := api.NewPasswordApi("http://localhost:8080/fidus/password")
+	passwordApi := api.NewPasswordApi()
 	v := validate.Validate()
 	return &StorePassword{passwordApi: passwordApi, validate: v, config: cfg}
 }

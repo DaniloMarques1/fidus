@@ -16,7 +16,7 @@ type AuthenticateMaster struct {
 }
 
 func NewAuthenticateMaster() *AuthenticateMaster {
-	masterApi := api.NewMasterApi("http://localhost:8080/fidus/master")
+	masterApi := api.NewMasterApi()
 	v := validate.Validate()
 	config := config.NewConfig()
 	return &AuthenticateMaster{masterApi: masterApi, validate: v, config: config}

@@ -14,7 +14,7 @@ type RegisterMaster struct {
 }
 
 func NewRegisterMaster() *RegisterMaster {
-	masterApi := api.NewMasterApi("http://localhost:8080/fidus/master")
+	masterApi := api.NewMasterApi()
 	v := validate.Validate()
 	return &RegisterMaster{masterApi: masterApi, validate: v}
 }

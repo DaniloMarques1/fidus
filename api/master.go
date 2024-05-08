@@ -20,7 +20,8 @@ type masterApi struct {
 	baseUrl string
 }
 
-func NewMasterApi(baseUrl string) MasterApi {
+func NewMasterApi() MasterApi {
+	baseUrl := "http://localhost:8080/fidus/master"
 	return &masterApi{baseUrl}
 }
 

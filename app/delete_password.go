@@ -12,7 +12,7 @@ type DeletePassword struct {
 }
 
 func NewDeletePassword() *DeletePassword {
-	passwordApi := api.NewPasswordApi("http://localhost:8080/fidus/password")
+	passwordApi := api.NewPasswordApi()
 	cfg := config.NewConfig()
 	return &DeletePassword{passwordApi: passwordApi, config: cfg}
 }
