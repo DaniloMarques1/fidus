@@ -2,12 +2,14 @@ name: Build and Publish
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "*"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -27,17 +29,15 @@ jobs:
           name: fidus-linux
           path: fidus
 
-      - name: Upload Binary
-        uses: xresloader/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Release
+        uses: softprops/action-gh-release@v1
         with:
-          file: "fidus"
-          tags: true
-          prerelease: false
+          files: "fidus"
 
   build_windows:
     runs-on: windows-latest
+    permissions:
+      contents: write 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -51,11 +51,8 @@ jobs:
         run: |
           go build -o fidus.exe
 
-      - name: Upload Binary
-        uses: xresloader/upload-to-github-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Release
+        uses: softprops/action-gh-release@v1
         with:
-          file: "fidus.exe"
-          tags: false
-          prerelease: false
+          files: "fidus.exe"
+
