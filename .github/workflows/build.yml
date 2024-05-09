@@ -1,0 +1,73 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.22'
+
+      - name: Build and Test on Linux
+        run: |
+          go build -o fidus
+
+      - name: Upload Linux Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: fidus-linux
+          path: fidus
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: fidus
+          path: fidus
+
+      - name: Upload Binary
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "fidus"
+          tags: true
+          prerelease: false
+
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.22'
+
+      - name: Build and Test on Windows
+        run: |
+          go build -o fidus.exe
+
+      - name: Upload Windows Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: fidus-windows
+          path: fidus.exe
+
+      - name: Upload Binary
+        uses: xresloader/upload-to-github-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          file: "fidus.exe"
+          tags: true
+          prerelease: false
