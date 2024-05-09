@@ -28,12 +28,6 @@ jobs:
           path: fidus
 
       - name: Upload Binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: fidus
-          path: fidus
-
-      - name: Upload Binary
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,17 +51,11 @@ jobs:
         run: |
           go build -o fidus.exe
 
-      - name: Upload Windows Binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: fidus-windows
-          path: fidus.exe
-
       - name: Upload Binary
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           file: "fidus.exe"
-          tags: true
+          tags: false
           prerelease: false
