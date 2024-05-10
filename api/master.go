@@ -13,7 +13,7 @@ import (
 
 type MasterApi interface {
 	Register(*dto.RegisterMasterDto) error
-	Authenticate(dto.AuthenticateMasterDto) (string, int64, error)
+	Authenticate(*dto.AuthenticateMasterDto) (string, int64, error)
 }
 
 type masterApi struct {
@@ -42,7 +42,7 @@ func (master *masterApi) Register(body *dto.RegisterMasterDto) error {
 	return nil
 }
 
-func (master *masterApi) Authenticate(body dto.AuthenticateMasterDto) (string, int64, error) {
+func (master *masterApi) Authenticate(body *dto.AuthenticateMasterDto) (string, int64, error) {
 	b, err := json.Marshal(body)
 	if err != nil {
 		log.Println(err.Error())

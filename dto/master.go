@@ -32,6 +32,17 @@ type AuthenticateMasterDto struct {
 	Password string `json:"password" validate:"required"`
 }
 
+func NewAuthenticateMasterDto(email, password string) (*AuthenticateMasterDto, error) {
+	if len(email) == 0 || !validate.Email(email) {
+		return nil, errors.New("Email is invalid")
+	}
+	if len(password) < 8 {
+		return nil, errors.New("Password is invalid")
+	}
+	authenticateMasterDto := &AuthenticateMasterDto{Email: email, Password: password}
+	return authenticateMasterDto, nil
+}
+
 type AuthenticateMasterResponseDto struct {
 	AccessToken string `json:"access_token"`
 	ExpiresAt   int64  `json:"expires_at"`
