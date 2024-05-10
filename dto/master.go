@@ -16,7 +16,7 @@ func NewRegisterMasterDto(name, email, password string) (*RegisterMasterDto, err
 	if len(name) == 0 {
 		return nil, errors.New("Name is invalid")
 	}
-	if len(email) == 0 && !validate.Email(email) {
+	if len(email) == 0 || !validate.Email(email) {
 		return nil, errors.New("Email is invalid")
 	}
 	if len(password) < 8 {
