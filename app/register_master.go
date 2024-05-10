@@ -20,8 +20,8 @@ func NewRegisterMaster() *RegisterMaster {
 }
 
 func (master *RegisterMaster) Execute(name, email, password string) error {
-	body := dto.RegisterMasterDto{Name: name, Email: email, Password: password}
-	if err := master.validate.Struct(body); err != nil {
+	body, err := dto.NewRegisterMasterDto(name, email, password)
+	if err != nil {
 		return clierror.ErrInvalidParameters()
 	}
 	if err := master.masterApi.Register(body); err != nil {

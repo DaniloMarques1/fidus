@@ -12,7 +12,7 @@ import (
 )
 
 type MasterApi interface {
-	Register(dto.RegisterMasterDto) error
+	Register(*dto.RegisterMasterDto) error
 	Authenticate(dto.AuthenticateMasterDto) (string, int64, error)
 }
 
@@ -25,7 +25,7 @@ func NewMasterApi() MasterApi {
 	return &masterApi{baseUrl}
 }
 
-func (master *masterApi) Register(body dto.RegisterMasterDto) error {
+func (master *masterApi) Register(body *dto.RegisterMasterDto) error {
 	b, err := json.Marshal(body)
 	if err != nil {
 		return err
