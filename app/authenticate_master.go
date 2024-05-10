@@ -5,21 +5,17 @@ import (
 	"github.com/danilomarques1/fidus/clierror"
 	"github.com/danilomarques1/fidus/config"
 	"github.com/danilomarques1/fidus/dto"
-	"github.com/danilomarques1/fidus/validate"
-	"github.com/go-playground/validator/v10"
 )
 
 type AuthenticateMaster struct {
 	masterApi api.MasterApi
-	validate  *validator.Validate
 	config    *config.Config
 }
 
 func NewAuthenticateMaster() *AuthenticateMaster {
 	masterApi := api.NewMasterApi()
-	v := validate.Validate()
 	config := config.NewConfig()
-	return &AuthenticateMaster{masterApi: masterApi, validate: v, config: config}
+	return &AuthenticateMaster{masterApi: masterApi, config: config}
 }
 
 func (master *AuthenticateMaster) Execute(email, password string) error {

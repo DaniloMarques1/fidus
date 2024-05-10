@@ -26,8 +26,8 @@ func (u *UpdatePassword) Execute(key, newPassword string) error {
 	if len(key) == 0 {
 		return clierror.ErrInvalidParameters()
 	}
-	body := &dto.UpdatePasswordRequestDto{Password: newPassword}
-	if err := u.validate.Struct(body); err != nil {
+	body, err := dto.NewUpdatePasswordDto(newPassword)
+	if err != nil {
 		return clierror.ErrInvalidParameters()
 	}
 	token, err := u.cfg.GetToken()

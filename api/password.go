@@ -13,7 +13,7 @@ type PasswordApi interface {
 	StorePassword(token string, body *dto.StorePasswordDto) error
 	RetrievePassword(token, key string) (string, error)
 	DeletePassword(token, key string) error
-	UpdatePassword(token, key string, body *dto.UpdatePasswordRequestDto) error
+	UpdatePassword(token, key string, body *dto.UpdatePasswordDto) error
 }
 
 type passwordApi struct {
@@ -100,7 +100,7 @@ func (p *passwordApi) DeletePassword(token, key string) error {
 	return nil
 }
 
-func (p *passwordApi) UpdatePassword(token, key string, body *dto.UpdatePasswordRequestDto) error {
+func (p *passwordApi) UpdatePassword(token, key string, body *dto.UpdatePasswordDto) error {
 	b, err := json.Marshal(body)
 	if err != nil {
 		return err
