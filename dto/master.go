@@ -7,9 +7,9 @@ import (
 )
 
 type RegisterMasterDto struct {
-	Name     string `json:"name" validate:"required"`
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 func NewRegisterMasterDto(name, email, password string) (*RegisterMasterDto, error) {
@@ -28,8 +28,8 @@ func NewRegisterMasterDto(name, email, password string) (*RegisterMasterDto, err
 }
 
 type AuthenticateMasterDto struct {
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 func NewAuthenticateMasterDto(email, password string) (*AuthenticateMasterDto, error) {

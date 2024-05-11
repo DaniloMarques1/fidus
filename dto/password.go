@@ -3,8 +3,8 @@ package dto
 import "errors"
 
 type StorePasswordDto struct {
-	Key      string `json:"key" validate:"required"`
-	Password string `json:"password" validate:"required"`
+	Key      string `json:"key"`
+	Password string `json:"password"`
 }
 
 func NewStorePasswordDto(key, password string) (*StorePasswordDto, error) {
@@ -25,7 +25,7 @@ type RetrievePasswordDto struct {
 }
 
 type UpdatePasswordDto struct {
-	Password string `json:"password" validate:"required"`
+	Password string `json:"password"`
 }
 
 func NewUpdatePasswordDto(password string) (*UpdatePasswordDto, error) {

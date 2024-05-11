@@ -5,21 +5,17 @@ import (
 	"github.com/danilomarques1/fidus/clierror"
 	"github.com/danilomarques1/fidus/config"
 	"github.com/danilomarques1/fidus/dto"
-	"github.com/danilomarques1/fidus/validate"
-	"github.com/go-playground/validator/v10"
 )
 
 type StorePassword struct {
 	passwordApi api.PasswordApi
-	validate    *validator.Validate
 	config      *config.Config
 }
 
 func NewStorePassword() *StorePassword {
 	cfg := config.NewConfig()
 	passwordApi := api.NewPasswordApi()
-	v := validate.Validate()
-	return &StorePassword{passwordApi: passwordApi, validate: v, config: cfg}
+	return &StorePassword{passwordApi: passwordApi, config: cfg}
 }
 
 func (storePassword *StorePassword) Execute(key, password string) error {
