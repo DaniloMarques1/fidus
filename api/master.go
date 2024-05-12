@@ -21,7 +21,7 @@ type masterApi struct {
 }
 
 func NewMasterApi() MasterApi {
-	baseUrl := "http://localhost:8080/fidus/master"
+	baseUrl := "https://fidusserver-5icrkm6i2q-uc.a.run.app/fidus/master"
 	return &masterApi{baseUrl}
 }
 

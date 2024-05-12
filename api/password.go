@@ -21,7 +21,7 @@ type passwordApi struct {
 }
 
 func NewPasswordApi() PasswordApi {
-	baseUrl := "http://localhost:8080/fidus/password"
+	baseUrl := "https://fidusserver-5icrkm6i2q-uc.a.run.app/fidus/password"
 	return &passwordApi{baseUrl}
 }
 
