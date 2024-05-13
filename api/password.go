@@ -14,6 +14,7 @@ type PasswordApi interface {
 	RetrievePassword(token, key string) (string, error)
 	DeletePassword(token, key string) error
 	UpdatePassword(token, key string, body *dto.UpdatePasswordDto) error
+	Keys(token string) ([]string, error)
 }
 
 type passwordApi struct {
@@ -121,4 +122,26 @@ func (p *passwordApi) UpdatePassword(token, key string, body *dto.UpdatePassword
 	defer res.Body.Close()
 
 	return nil
+}
+
+func (p *passwordApi) Keys(token string) ([]string, error) {
+	req, err := http.NewRequest(http.MethodGet, p.baseUrl+"/keys", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+token)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	b, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	keys := make([]string, 0)
+	if err := json.Unmarshal(b, &keys); err != nil {
+		return nil, err
+	}
+	return keys, nil
 }
