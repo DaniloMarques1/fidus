@@ -10,5 +10,4 @@ func Email(value string) bool {
 	}
 
 	return pattern.MatchString(value)
-	return true
 }
