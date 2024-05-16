@@ -7,7 +7,7 @@ import (
 
 type Keys struct {
 	passwordApi api.PasswordApi
-	config      *config.Config
+	config      config.Config
 }
 
 func NewKeys() *Keys {

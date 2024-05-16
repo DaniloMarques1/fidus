@@ -18,24 +18,32 @@ type Token struct {
 	ExpiresAt   int64  `json:"expires_at"`
 }
 
-type Config struct {
+type Config interface {
+	CreateConfigFolder() error
+	SetupLogger() error
+	GetToken() (string, error)
+	RemoveToken()
+	SaveToken(accessToken string, expiresAt int64) error
+}
+
+type config struct {
 	configFolder string
 }
 
 var once sync.Once
 
-func NewConfig() *Config {
+func NewConfig() Config {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)
 	}
-	cfg := &Config{}
+	cfg := &config{}
 	configLocation := cfg.getConfigLocation()
 	cfg.configFolder = fmt.Sprintf("%v/%v", homeDir, configLocation)
 	return cfg
 }
 
-func (cfg *Config) getConfigLocation() string {
+func (cfg *config) getConfigLocation() string {
 	switch runtime.GOOS {
 	case "windows":
 		return "AppData/Local/fidus"
@@ -44,14 +52,14 @@ func (cfg *Config) getConfigLocation() string {
 	}
 }
 
-func (cfg *Config) CreateConfigFolder() error {
+func (cfg *config) CreateConfigFolder() error {
 	if err := os.MkdirAll(cfg.configFolder, fs.ModePerm); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (cfg *Config) SetupLogger() error {
+func (cfg *config) SetupLogger() error {
 	logOutputFile, err := os.OpenFile(cfg.configFolder+"/log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
@@ -60,14 +68,14 @@ func (cfg *Config) SetupLogger() error {
 	return nil
 }
 
-func (cfg *Config) isTokenExpired(expiresAt int64) bool {
+func (cfg *config) isTokenExpired(expiresAt int64) bool {
 	tokenExpirationDate := time.UnixMilli(expiresAt * 1000)
 	currentDate := time.Now()
 
 	return tokenExpirationDate.Compare(currentDate) == -1
 }
 
-func (cfg *Config) GetToken() (string, error) {
+func (cfg *config) GetToken() (string, error) {
 	token, err := cfg.readToken()
 	if err != nil {
 		return "", clierror.ErrInvalidToken()
@@ -78,13 +86,13 @@ func (cfg *Config) GetToken() (string, error) {
 	return token.AccessToken, nil
 }
 
-func (cfg *Config) RemoveToken() {
+func (cfg *config) RemoveToken() {
 	if err := os.Truncate(fmt.Sprintf("%v/.token", cfg.configFolder), 0); err != nil {
 		log.Printf("Error removing token %v", err)
 	}
 }
 
-func (cfg *Config) readToken() (*Token, error) {
+func (cfg *config) readToken() (*Token, error) {
 	b, err := os.ReadFile(fmt.Sprintf("%v/.token", cfg.configFolder))
 	if err != nil {
 		return nil, err
@@ -96,7 +104,7 @@ func (cfg *Config) readToken() (*Token, error) {
 	return token, nil
 }
 
-func (cfg *Config) SaveToken(accessToken string, expiresAt int64) error {
+func (cfg *config) SaveToken(accessToken string, expiresAt int64) error {
 	token := &Token{AccessToken: accessToken, ExpiresAt: expiresAt}
 	file, err := os.Create(cfg.configFolder + "/.token")
 	if err != nil {

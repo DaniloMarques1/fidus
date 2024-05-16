@@ -8,7 +8,7 @@ import (
 
 type RetrievePassword struct {
 	passwordApi api.PasswordApi
-	config      *config.Config
+	config      config.Config
 }
 
 func NewRetrievePassword() *RetrievePassword {

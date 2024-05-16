@@ -8,7 +8,7 @@ import (
 
 type DeletePassword struct {
 	passwordApi api.PasswordApi
-	config      *config.Config
+	config      config.Config
 }
 
 func NewDeletePassword() *DeletePassword {

@@ -9,7 +9,7 @@ import (
 
 type UpdatePassword struct {
 	passwordApi api.PasswordApi
-	cfg         *config.Config
+	cfg         config.Config
 }
 
 func NewUpdatePassword() *UpdatePassword {

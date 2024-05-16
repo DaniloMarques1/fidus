@@ -9,7 +9,7 @@ import (
 
 type AuthenticateMaster struct {
 	masterApi api.MasterApi
-	config    *config.Config
+	config    config.Config
 }
 
 func NewAuthenticateMaster() *AuthenticateMaster {
