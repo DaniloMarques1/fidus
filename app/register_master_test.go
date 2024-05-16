@@ -1,25 +1,28 @@
 package app
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/danilomarques1/fidus/dto"
 )
 
-type masterApiMemory struct {
-	users map[string]string
+type registerMasterApiMemory struct {
+	shouldReturnError bool
 }
 
-func newMasterApiMemory() *masterApiMemory {
-	return &masterApiMemory{users: make(map[string]string)}
+func newRegisterMasterApiMemory(shouldReturnError bool) *registerMasterApiMemory {
+	return &registerMasterApiMemory{shouldReturnError: shouldReturnError}
 }
 
-func (m *masterApiMemory) Register(body *dto.RegisterMasterDto) error {
-	m.users[body.Email] = body.Password
+func (m *registerMasterApiMemory) Register(body *dto.RegisterMasterDto) error {
+	if m.shouldReturnError {
+		return errors.New("returning an error")
+	}
 	return nil
 }
 
-func (m *masterApiMemory) Authenticate(body *dto.AuthenticateMasterDto) (string, int64, error) {
+func (m *registerMasterApiMemory) Authenticate(body *dto.AuthenticateMasterDto) (string, int64, error) {
 	return "", 0, nil
 }
 
@@ -38,12 +41,21 @@ func TestRegisterMaster(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		masterApi := &masterApiMemory{users: make(map[string]string)}
+		masterApi := newRegisterMasterApiMemory(false)
 		registerMaster := RegisterMaster{masterApi}
 		err := registerMaster.Execute(tc.name, tc.email, tc.password)
 		out := err != nil
 		if out != tc.expectedError {
 			t.Fatalf("Should return error: %v\n", tc.expectedError)
 		}
+	}
+}
+
+func TestRegisterMasterError(t *testing.T) {
+	masterApi := newRegisterMasterApiMemory(true)
+	registerMaster := RegisterMaster{masterApi}
+	err := registerMaster.Execute("Mock Name", "mock@mail.com", "mock123@@Mock")
+	if err.Error() != "returning an error" {
+		t.Fatalf("Wrong error returned %v\n", err)
 	}
 }
