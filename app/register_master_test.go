@@ -25,11 +25,11 @@ func (m *masterApiMemory) Authenticate(body *dto.AuthenticateMasterDto) (string,
 
 func TestRegisterMaster(t *testing.T) {
 	cases := []struct {
-		label    string
-		name     string
-		email    string
-		password string
-		expected bool
+		label         string
+		name          string
+		email         string
+		password      string
+		expectedError bool
 	}{
 		{"Should not return an error", "mock name", "mock@mail.com", "mock@@123Mock", false},
 		{"Should not allow password length below 8", "mock name", "mock@mail.com", "mock", true},
@@ -42,8 +42,8 @@ func TestRegisterMaster(t *testing.T) {
 		registerMaster := RegisterMaster{masterApi}
 		err := registerMaster.Execute(tc.name, tc.email, tc.password)
 		out := err != nil
-		if out != tc.expected {
-			t.Fatalf("Should return error: %v\n", tc.expected)
+		if out != tc.expectedError {
+			t.Fatalf("Should return error: %v\n", tc.expectedError)
 		}
 	}
 }
