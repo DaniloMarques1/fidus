@@ -15,7 +15,7 @@ func NewResetMasterPassword() *ResetMasterPassword {
 }
 
 func (r *ResetMasterPassword) Execute(email, oldPassword, newPassword string) error {
-	body, err := dto.NewResetMasterPassword(email, oldPassword, newPassword)
+	body, err := dto.NewResetMasterPasswordDto(email, oldPassword, newPassword)
 	if err != nil {
 		return err
 	}

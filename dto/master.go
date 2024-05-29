@@ -54,7 +54,16 @@ type ResetMasterPasswordDto struct {
 	NewPassword string `json:"new_password"`
 }
 
-// TODO add validations
-func NewResetMasterPassword(email, oldPassword, newPassword string) (*ResetMasterPasswordDto, error) {
+func NewResetMasterPasswordDto(email, oldPassword, newPassword string) (*ResetMasterPasswordDto, error) {
+	if !validate.Email(email) {
+		return nil, errors.New("Email is invalid")
+	}
+	if !validate.MasterPassword(oldPassword) {
+		return nil, errors.New("Old password is invalid")
+	}
+	if !validate.MasterPassword(newPassword) {
+		return nil, errors.New("New password is invalid")
+	}
+
 	return &ResetMasterPasswordDto{Email: email, OldPassword: oldPassword, NewPassword: newPassword}, nil
 }
