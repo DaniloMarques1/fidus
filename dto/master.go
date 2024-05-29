@@ -47,3 +47,14 @@ type AuthenticateMasterResponseDto struct {
 	AccessToken string `json:"access_token"`
 	ExpiresAt   int64  `json:"expires_at"`
 }
+
+type ResetMasterPasswordDto struct {
+	Email       string `json:"email"`
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
+}
+
+// TODO add validations
+func NewResetMasterPassword(email, oldPassword, newPassword string) (*ResetMasterPasswordDto, error) {
+	return &ResetMasterPasswordDto{Email: email, OldPassword: oldPassword, NewPassword: newPassword}, nil
+}

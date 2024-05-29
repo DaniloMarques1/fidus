@@ -14,6 +14,7 @@ import (
 type MasterApi interface {
 	Register(*dto.RegisterMasterDto) error
 	Authenticate(*dto.AuthenticateMasterDto) (string, int64, error)
+	ResetMasterPassword(*dto.ResetMasterPasswordDto) error
 }
 
 type masterApi struct {
@@ -72,6 +73,28 @@ func (master *masterApi) Authenticate(body *dto.AuthenticateMasterDto) (string, 
 	}
 
 	return respBody.AccessToken, respBody.ExpiresAt, nil
+}
+
+func (api *masterApi) ResetMasterPassword(body *dto.ResetMasterPasswordDto) error {
+	b, err := json.Marshal(body)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(http.MethodPut, api.baseUrl+"/reset/password", bytes.NewReader(b))
+	if err != nil {
+		return err
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusNoContent {
+		err := readErrorMessageFromBody(resp.Body)
+		log.Printf("Error %v\n", err)
+		return err
+	}
+	return nil
 }
 
 func readErrorMessageFromBody(body io.ReadCloser) error {
