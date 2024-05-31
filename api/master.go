@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/danilomarques1/fidus/config"
 	"github.com/danilomarques1/fidus/dto"
 )
 
@@ -22,8 +23,8 @@ type masterApi struct {
 }
 
 func NewMasterApi() MasterApi {
-	baseUrl := "https://fidusserver-5icrkm6i2q-uc.a.run.app/fidus/master"
-	return &masterApi{baseUrl}
+	cfg := config.NewConfig()
+	return &masterApi{baseUrl: cfg.GetBaseUrl()}
 }
 
 func (master *masterApi) Register(body *dto.RegisterMasterDto) error {
@@ -31,7 +32,7 @@ func (master *masterApi) Register(body *dto.RegisterMasterDto) error {
 	if err != nil {
 		return err
 	}
-	resp, err := http.Post(master.baseUrl+"/register", "application/json", bytes.NewReader(b))
+	resp, err := http.Post(master.baseUrl+"/master/register", "application/json", bytes.NewReader(b))
 	if err != nil {
 		return err
 	}
@@ -49,7 +50,7 @@ func (master *masterApi) Authenticate(body *dto.AuthenticateMasterDto) (string, 
 		log.Println(err.Error())
 		return "", 0, err
 	}
-	resp, err := http.Post(master.baseUrl+"/authenticate", "application/json", bytes.NewReader(b))
+	resp, err := http.Post(master.baseUrl+"/master/authenticate", "application/json", bytes.NewReader(b))
 	if err != nil {
 		log.Println(err.Error())
 		return "", 0, err
@@ -80,7 +81,7 @@ func (api *masterApi) ResetMasterPassword(body *dto.ResetMasterPasswordDto) erro
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest(http.MethodPut, api.baseUrl+"/reset/password", bytes.NewReader(b))
+	req, err := http.NewRequest(http.MethodPut, api.baseUrl+"/master/reset/password", bytes.NewReader(b))
 	if err != nil {
 		return err
 	}

@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/danilomarques1/fidus/config"
 	"github.com/danilomarques1/fidus/dto"
 )
 
@@ -22,8 +23,8 @@ type passwordApi struct {
 }
 
 func NewPasswordApi() PasswordApi {
-	baseUrl := "https://fidusserver-5icrkm6i2q-uc.a.run.app/fidus/password"
-	return &passwordApi{baseUrl}
+	cfg := config.NewConfig()
+	return &passwordApi{baseUrl: cfg.GetBaseUrl()}
 }
 
 func (p *passwordApi) StorePassword(token string, body *dto.StorePasswordDto) error {
@@ -31,7 +32,7 @@ func (p *passwordApi) StorePassword(token string, body *dto.StorePasswordDto) er
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest(http.MethodPost, p.baseUrl+"/store", bytes.NewReader(b))
+	req, err := http.NewRequest(http.MethodPost, p.baseUrl+"/password/store", bytes.NewReader(b))
 	if err != nil {
 		return err
 	}
@@ -50,7 +51,7 @@ func (p *passwordApi) StorePassword(token string, body *dto.StorePasswordDto) er
 }
 
 func (p *passwordApi) RetrievePassword(token, key string) (string, error) {
-	req, err := http.NewRequest(http.MethodGet, p.baseUrl+"/retrieve", nil)
+	req, err := http.NewRequest(http.MethodGet, p.baseUrl+"/password/retrieve", nil)
 	if err != nil {
 		return "", err
 	}
@@ -106,7 +107,7 @@ func (p *passwordApi) UpdatePassword(token, key string, body *dto.UpdatePassword
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest(http.MethodPut, p.baseUrl+"/update", bytes.NewReader(b))
+	req, err := http.NewRequest(http.MethodPut, p.baseUrl+"/password/update", bytes.NewReader(b))
 	if err != nil {
 		return err
 	}
@@ -125,7 +126,7 @@ func (p *passwordApi) UpdatePassword(token, key string, body *dto.UpdatePassword
 }
 
 func (p *passwordApi) Keys(token string) ([]string, error) {
-	req, err := http.NewRequest(http.MethodGet, p.baseUrl+"/keys", nil)
+	req, err := http.NewRequest(http.MethodGet, p.baseUrl+"/password/keys", nil)
 	if err != nil {
 		return nil, err
 	}

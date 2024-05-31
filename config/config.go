@@ -24,6 +24,7 @@ type Config interface {
 	GetToken() (string, error)
 	RemoveToken()
 	SaveToken(accessToken string, expiresAt int64) error
+	GetBaseUrl() string
 }
 
 type config struct {
@@ -31,15 +32,17 @@ type config struct {
 }
 
 var once sync.Once
+var cfg = &config{}
 
 func NewConfig() Config {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatal(err)
-	}
-	cfg := &config{}
-	configLocation := cfg.getConfigLocation()
-	cfg.configFolder = fmt.Sprintf("%v/%v", homeDir, configLocation)
+	once.Do(func() {
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			log.Fatal(err)
+		}
+		configLocation := cfg.getConfigLocation()
+		cfg.configFolder = fmt.Sprintf("%v/%v", homeDir, configLocation)
+	})
 	return cfg
 }
 
@@ -115,4 +118,8 @@ func (cfg *config) SaveToken(accessToken string, expiresAt int64) error {
 		return err
 	}
 	return nil
+}
+
+func (cfg *config) GetBaseUrl() string {
+	return "https://fidusserver-5icrkm6i2q-uc.a.run.app/fidus"
 }
