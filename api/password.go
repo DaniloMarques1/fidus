@@ -81,7 +81,7 @@ func (p *passwordApi) RetrievePassword(token, key string) (string, error) {
 }
 
 func (p *passwordApi) DeletePassword(token, key string) error {
-	req, err := http.NewRequest(http.MethodDelete, p.baseUrl+"/delete", nil)
+	req, err := http.NewRequest(http.MethodDelete, p.baseUrl+"/password/delete", nil)
 	if err != nil {
 		return err
 	}
