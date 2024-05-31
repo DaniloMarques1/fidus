@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/danilomarques1/fidus/api"
+	"github.com/danilomarques1/fidus/clierror"
 	"github.com/danilomarques1/fidus/dto"
 )
 
@@ -17,7 +18,7 @@ func NewResetMasterPassword() *ResetMasterPassword {
 func (r *ResetMasterPassword) Execute(email, oldPassword, newPassword string) error {
 	body, err := dto.NewResetMasterPasswordDto(email, oldPassword, newPassword)
 	if err != nil {
-		return err
+		return clierror.ErrInvalidParameters(err.Error())
 	}
 	if err := r.masterApi.ResetMasterPassword(body); err != nil {
 		return err

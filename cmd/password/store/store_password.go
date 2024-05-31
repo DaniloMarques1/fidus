@@ -24,7 +24,7 @@ func init() {
 
 func run(cmd *cobra.Command, args []string) {
 	key := cmd.Flag("key").Value.String()
-	fmt.Print("Password: ")
+	fmt.Print("Password to store: ")
 	pwd, err := terminal.ReadUserPassword()
 	if err != nil {
 		fmt.Println(err)

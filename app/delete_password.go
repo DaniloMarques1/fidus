@@ -19,7 +19,7 @@ func NewDeletePassword() *DeletePassword {
 
 func (d *DeletePassword) Execute(key string) error {
 	if len(key) == 0 {
-		return clierror.ErrInvalidParameters()
+		return clierror.ErrInvalidParameters("Key must not be empty")
 	}
 	token, err := d.config.GetToken()
 	if err != nil {

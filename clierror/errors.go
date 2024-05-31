@@ -1,11 +1,14 @@
 package clierror
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 func ErrInvalidToken() error {
 	return errors.New("You need to authenticate")
 }
 
-func ErrInvalidParameters() error {
-	return errors.New("Invalid parameters see help for usage")
+func ErrInvalidParameters(msg string) error {
+	return fmt.Errorf("Invalid parameters see help for usage. %v", msg)
 }

@@ -19,7 +19,7 @@ func NewRetrievePassword() *RetrievePassword {
 
 func (retrieve *RetrievePassword) Execute(key string) (string, error) {
 	if len(key) == 0 {
-		return "", clierror.ErrInvalidParameters()
+		return "", clierror.ErrInvalidParameters("Key must not be empty")
 	}
 	token, err := retrieve.config.GetToken()
 	if err != nil {

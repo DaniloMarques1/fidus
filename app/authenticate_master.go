@@ -21,7 +21,7 @@ func NewAuthenticateMaster() *AuthenticateMaster {
 func (master *AuthenticateMaster) Execute(email, password string) error {
 	body, err := dto.NewAuthenticateMasterDto(email, password)
 	if err != nil {
-		return clierror.ErrInvalidParameters()
+		return clierror.ErrInvalidParameters(err.Error())
 	}
 	accessToken, expiresAt, err := master.masterApi.Authenticate(body)
 	if err != nil {

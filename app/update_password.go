@@ -20,11 +20,11 @@ func NewUpdatePassword() *UpdatePassword {
 
 func (u *UpdatePassword) Execute(key, newPassword string) error {
 	if len(key) == 0 {
-		return clierror.ErrInvalidParameters()
+		return clierror.ErrInvalidParameters("Key must not be empty")
 	}
 	body, err := dto.NewUpdatePasswordDto(newPassword)
 	if err != nil {
-		return clierror.ErrInvalidParameters()
+		return clierror.ErrInvalidParameters(err.Error())
 	}
 	token, err := u.cfg.GetToken()
 	if err != nil {

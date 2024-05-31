@@ -21,7 +21,7 @@ func NewStorePassword() *StorePassword {
 func (storePassword *StorePassword) Execute(key, password string) error {
 	body, err := dto.NewStorePasswordDto(key, password)
 	if err != nil {
-		return clierror.ErrInvalidParameters()
+		return clierror.ErrInvalidParameters(err.Error())
 	}
 	token, err := storePassword.config.GetToken()
 	if err != nil {

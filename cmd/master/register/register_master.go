@@ -48,5 +48,4 @@ func run(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 	fmt.Println("Master registered")
-
 }
